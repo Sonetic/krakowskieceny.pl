@@ -78,7 +78,7 @@ async function payAndRedirect() {
         pietro: Number(document.getElementById("Floor").value)
     };
 
-    const res = await fetch("https://wwacenyrenderplatnosciapp.onrender.com/create-checkout-session", {
+    const res = await fetch("https://krakowskieceny-plapp.onrender.com/create-checkout-session", {
         method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify(data)
