@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Wynik analizy</title>
+    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+
+
+<div class="form-box" style="margin-top: 100px;">
+    <h2>Płatność zakończona ✔</h2>
+
+    <button onclick="runPrediction()">Wygeneruj wyniki</button>
+    <button onclick="downloadZip()" id="downloadBtn" style="display:none;">
+        Pobierz ZIP
+    </button>
+</div>
+
+<div id="note" style="display:none; margin-top:20px; font-weight:bold; text-align:center;">
+    Jeśli budynku nie ma w bazie danych, to nie wyświetli się i nie będzie możliwy do pobrania plik "dane z budynku.csv",
+    <br>
+    natomiast jeśli podana ulica w ogóle nie występuje w bazie danych, to również nie pojawi się plik "dane z ulicy.csv".
+    <br>
+    Tabele oraz pliki "predykcja.csv" oraz "dane z najbliższej okolicy.csv" będą wyświetlone i dostepne do pobrania zawsze.
+    <br><br>
+    Proszę pamiętać, że poza tabelą "predykcja.csv" wszystkie dane są danymi faktycznymi, uzyskanymi z oficjalnych stron rządowych, a więc są to dane prawdziwe.
+    <br><br>
+        <a href="predykcja.html" class="main-btn">Przejdź do analizy</a>
+
+
+
+</div>
+
+
+<!-- 🔥 brakowało tego -->
+<div id="tables"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+
+<script>
+let zipBlob = null;
+
+async function runPrediction() {
+    const container = document.getElementById("tables");
+    container.innerHTML = "";
+
+    // 📦 lokalny ZIP
+    const response = await fetch("./wyniki.zip");
+    const blob = await response.blob();
+
+    zipBlob = blob;
+
+    const zip = await JSZip.loadAsync(blob);
+
+    for (const filename of Object.keys(zip.files)) {
+        const text = await zip.files[filename].async("text");
+
+        const rows = text.trim().split("\n").map(r => r.split(","));
+
+        const table = document.createElement("table");
+
+        const caption = document.createElement("caption");
+        caption.textContent = filename;
+        table.appendChild(caption);
+
+        // header
+        const header = document.createElement("tr");
+        rows[0].forEach(h => {
+            const th = document.createElement("th");
+            th.textContent = h;
+            header.appendChild(th);
+        });
+        table.appendChild(header);
+
+        // data
+        rows.slice(1).forEach(row => {
+            const tr = document.createElement("tr");
+
+            row.forEach(cell => {
+                const td = document.createElement("td");
+                td.textContent = cell;
+                tr.appendChild(td);
+            });
+
+            table.appendChild(tr);
+        });
+
+        container.appendChild(table);
+    }
+
+    document.getElementById("downloadBtn").style.display = "inline-block";
+    document.getElementById("note").style.display = "block";
+}
+
+function downloadZip() {
+    const a = document.createElement("a");
+    a.href = "./wyniki.zip";
+    a.download = "wyniki.zip";
+    a.click();
+}
+</script>
+
+</body>
+</html>

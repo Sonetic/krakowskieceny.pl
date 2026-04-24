@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Analiza mieszkań</title>
+    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+</head>
+<body>
+
+<div class="form-box">
+    <h2>Podaj dane mieszkania</h2>
+
+    <div class="form-row">
+        <label>Ulica</label>
+        <input id="Street" type="text" list="street-list">
+        <datalist id="street-list"></datalist>
+    </div>
+
+    <div class="form-row">
+        <label>Numer</label>
+        <input id="Number" type="text">
+    </div>
+
+    <div class="form-row">
+        <label>Powierzchnia</label>
+        <input id="Area_m2" type="number">
+    </div>
+
+    <div class="form-row">
+        <label>Liczba pokoi</label>
+        <input id="Rooms" type="number">
+    </div>
+
+    <div class="form-row">
+        <label>Piętro</label>
+        <input id="Floor" type="number">
+    </div>
+
+    <button onclick="payAndRedirect()">Zapłać i oblicz cenę</button>
+</div>
+
+<script>
+let streets = [];
+
+fetch("unique_streets.csv")
+  .then(r => r.text())
+  .then(t => streets = t.trim().split("\n"));
+
+const input = document.getElementById("Street");
+const datalist = document.getElementById("street-list");
+
+input.addEventListener("input", () => {
+    datalist.innerHTML = "";
+
+    const fullVal = input.value.toLowerCase().trim();
+    const val = fullVal.split(/\s+/).pop();
+
+    if (!val) return;
+
+    streets.forEach(s => {
+        const words = s.toLowerCase().split(/\s+/);
+
+        if (words.some(w => w.startsWith(val))) {
+            const opt = document.createElement("option");
+            opt.value = s;
+            datalist.appendChild(opt);
+        }
+    });
+});
+async function payAndRedirect() {
+    const data = {
+        ulica: document.getElementById("Street").value,
+        numer: document.getElementById("Number").value,
+        powierzchnia: Number(document.getElementById("Area_m2").value),
+        liczba_pokoi: Number(document.getElementById("Rooms").value),
+        pietro: Number(document.getElementById("Floor").value)
+    };
+
+    const res = await fetch("https://wwacenyrenderplatnosciapp.onrender.com/create-checkout-session", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(data)
+    });
+
+    const json = await res.json();
+
+    localStorage.setItem("formData", JSON.stringify(data));
+
+    window.location = json.url;
+}
+</script>
+
+</body>
+</html>
