@@ -493,7 +493,7 @@ def predict_price(ulica, numer, powierzchnia, piętro, liczba_pokoi):
             pokoje_na_m2 = liczba_pokoi / powierzchnia
             ulica_vs_budynek = srednia_cena_ulica - srednia_budynek
             near_diff = near_300 - srednia_budynek
-            near_500 = y[7]
+            near_500 = y[5]
 
             X_input = pd.DataFrame([{
                 "inv_powierzchnia": inv_powierzchnia,

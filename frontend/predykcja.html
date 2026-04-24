@@ -71,8 +71,8 @@ input.addEventListener("input", () => {
 });
 async function payAndRedirect() {
     const data = {
-        ulica: document.getElementById("Street").value,
-        numer: document.getElementById("Number").value,
+        ulica: document.getElementById("Street").value.toUpperCase(),
+        numer: document.getElementById("Number").value.toUpperCase(),
         powierzchnia: Number(document.getElementById("Area_m2").value),
         liczba_pokoi: Number(document.getElementById("Rooms").value),
         pietro: Number(document.getElementById("Floor").value)
