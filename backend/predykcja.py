@@ -578,7 +578,7 @@ def predict_price(ulica, numer, powierzchnia, piętro, liczba_pokoi):
 
 if __name__ == "__main__":
 
-    record = predict_price("PROFESORA MICHAŁA BOBRZYŃSKIEGO", "33", 31, 3, 1)
+    record = predict_price("JULIUSZA LEA", "181", 20, 0, 1)
 
 
     df_result = pd.DataFrame([record[0]])

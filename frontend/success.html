@@ -13,9 +13,18 @@
     <h2>Płatność zakończona ✔</h2>
 
     <button onclick="runPrediction()">Wygeneruj wyniki</button>
+
+
     <button onclick="downloadZip()" id="downloadBtn" style="display:none;">
         Pobierz ZIP
     </button>
+    <div id="loader" style="display:none; margin-top:20px;">
+    <div class="bar">
+        <div class="progress" id="progress"></div>
+    </div>
+    <p id="loaderText">Przetwarzanie...</p>
+</div>
+
 </div>
 
 <div id="tables"></div>
@@ -26,6 +35,9 @@
 let zipBlob = null;
 
 async function runPrediction() {
+    document.getElementById("loader").style.display = "block";
+    document.getElementById("progress").style.width = "0%";
+    document.getElementById("loaderText").innerText = "Analizujemy dane...";
     const session_id = new URLSearchParams(window.location.search)
         .get("session_id");
 
@@ -35,6 +47,17 @@ async function runPrediction() {
     const maxRetries = 5;
     let response;
 
+
+    let progress = 0;
+    const progressBar = document.getElementById("progress");
+
+    const interval = setInterval(() => {
+        if (progress < 90) {
+            progress += 15;
+            progressBar.style.width = progress + "%";
+        }
+    }, 600);
+
     for (let i = 0; i < maxRetries; i++) {
         response = await fetch("https://krakowskieceny-plapp.onrender.com/predict", {
             method: "POST",
@@ -43,6 +66,8 @@ async function runPrediction() {
         });
 
         if (response.ok) {
+            clearInterval(interval);
+            progressBar.style.width = "100%";
             break; // sukces
         }
 
@@ -50,6 +75,9 @@ async function runPrediction() {
     }
 
     if (!response.ok) {
+        clearInterval(interval);
+        document.getElementById("loaderText").innerText = "Nie udało się wygenerować wyników";
+        document.getElementById("progress").style.background = "red";
         alert("Nie udało się wygenerować wyników. Spróbuj ponownie.");
         return;
     }

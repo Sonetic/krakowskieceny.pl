@@ -113,13 +113,13 @@ def webhook():
 limiter = Limiter(get_remote_address, app=app)
 
 @app.route("/predict", methods=["POST"])
-@limiter.limit("5 per minute")
+@limiter.limit("7 per minute")
 def predict():
     data = request.get_json()
     session_id = data.get("session_id")
 
     if not session_id:
-        return jsonify({"error": "Brak session_id"}), 403
+        return jsonify({"error": "Brak session_id"}), 400
 
     # CHECK SUPABASE
     res = supabase.table("payments").select("*").eq("id", session_id).execute()
@@ -130,7 +130,7 @@ def predict():
     payment = res.data[0]
 
     if not payment["paid"]:
-        return jsonify({"error": "Nieopłacone"}), 403
+        return jsonify({"error": "Nieopłacone"}), 402
 
     now = datetime.now(timezone.utc)
 
