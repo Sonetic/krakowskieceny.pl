@@ -320,7 +320,7 @@ def predict_price(ulica, numer, powierzchnia, piętro, liczba_pokoi):
                 "powierzchnia użytkowa": f"{powierzchnia} m2",
                 "piętro": piętro,
                 "liczba pokoi": liczba_pokoi,
-                "przewidywana cena": f"{pred.round().astype(int):,}".replace(',', ' ') + " zł",
+                "przewidywana cena za m2": f"{pred.round().astype(int):,}".replace(',', ' ') + " zł",
                 "srednia cena w budynku": f"{srednia_budynek.round():,}".replace(',', ' ') + " zł",
                 "średnia cena na ulicy": f"{srednia_ulicy.round().astype(int):,}".replace(',', ' ') + " zł",
                 "średnia cena w promieniu 100m": f"{near_100.round().astype(int):,}".replace(',', ' ') + " zł",
@@ -369,8 +369,8 @@ def predict_price(ulica, numer, powierzchnia, piętro, liczba_pokoi):
                 lat, lon = coords
 
                 # odległości od centrum i metra
-                pk_latlon = (52.2319581, 21.0067249)
-                dist_centrum = np.sqrt((lat - pk_latlon[0]) ** 2 + (lon - pk_latlon[1]) ** 2) * 111000
+                mariacki_latlon = (50.062068, 19.939080)
+                dist_centrum = np.sqrt((lat - mariacki_latlon[0]) ** 2 + (lon - mariacki_latlon[1]) ** 2) * 111000
 
 
                 # znajdź 2 najbliższych budynków na ulicy
@@ -459,7 +459,7 @@ def predict_price(ulica, numer, powierzchnia, piętro, liczba_pokoi):
                 "powierzchnia użytkowa": f"{powierzchnia} m2",
                 "piętro": piętro,
                 "liczba pokoi": liczba_pokoi,
-                "przewidywana cena": f"{pred.round().astype(int):,}".replace(',', ' ') + " zł",
+                "przewidywana cena za m2": f"{pred.round().astype(int):,}".replace(',', ' ') + " zł",
                 "średnia cena na ulicy": f"{srednia_ulicy.round().astype(int):,}".replace(',', ' ') + " zł",
                 "średnia cena w promieniu 100m": f"{near_100.round().astype(int):,}".replace(',', ' ') + " zł",
                 "średnia cena w promieniu 300m": f"{near_300.round().astype(int):,}".replace(',', ' ') + " zł",
@@ -479,8 +479,8 @@ def predict_price(ulica, numer, powierzchnia, piętro, liczba_pokoi):
             lat, lon = coords
 
             # odległości od centrum i metra
-            pk_latlon = (52.2319581, 21.0067249)
-            dist_centrum = np.sqrt((lat - pk_latlon[0]) ** 2 + (lon - pk_latlon[1]) ** 2) * 111000
+            mariacki_latlon = (50.062068, 19.939080)
+            dist_centrum = np.sqrt((lat - mariacki_latlon[0]) ** 2 + (lon - mariacki_latlon[1]) ** 2) * 111000
 
             y = find_nearest_buildings_by_coords(lat, lon)
 
@@ -556,7 +556,7 @@ def predict_price(ulica, numer, powierzchnia, piętro, liczba_pokoi):
             "powierzchnia użytkowa": f"{powierzchnia} m2",
             "piętro": piętro,
             "liczba pokoi": liczba_pokoi,
-            "przewidywana cena": f"{pred.round().astype(int):,}".replace(',', ' ') + " zł",
+            "przewidywana cena za m2": f"{pred.round().astype(int):,}".replace(',', ' ') + " zł",
             "średnia cena w promieniu 100m": f"{near_100.round().astype(int):,}".replace(',', ' ') + " zł",
             "średnia cena w promieniu 300m": f"{near_300.round().astype(int):,}".replace(',', ' ') + " zł",
             "średnia cena w promieniu 500m": f"{near_500.round().astype(int):,}".replace(',', ' ') + " zł",
@@ -578,7 +578,7 @@ def predict_price(ulica, numer, powierzchnia, piętro, liczba_pokoi):
 
 if __name__ == "__main__":
 
-    record = predict_price("JULIUSZA LEA", "181", 20, 0, 1)
+    record = predict_price("PROFESORA MICHAŁA BOBRZYŃSKIEGO", "33", 31, 3, 1)
 
 
     df_result = pd.DataFrame([record[0]])
