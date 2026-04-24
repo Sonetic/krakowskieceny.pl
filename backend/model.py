@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-
+import os
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
 from sklearn.impute import SimpleImputer
@@ -8,13 +8,13 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import Ridge
 from sklearn.ensemble import GradientBoostingRegressor
 from sklearn.metrics import mean_absolute_error, mean_squared_error
-
-import seaborn as sns
-import matplotlib.pyplot as plt
+import sys
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(BASE_DIR)
 
 
 # ===== 1. wczytanie =====
-df = pd.read_csv("transactions_ready.csv")
+df = pd.read_csv(os.path.join(BASE_DIR, "transactions_ready.csv"))
 df["inv_powierzchnia"] = 1/df["powierzchnia_uzyt"]
 df["relacja_ulica"] = df["srednia_budynek"] / df["srednia_cena_dzielnica"]
 df["pokoje_na_m2"] = df["liczba_pokoi"] / df["powierzchnia_uzyt"]
@@ -89,7 +89,7 @@ yo_pred = model_out.predict(Xo_test)
 # train predictions
 yn_pred_train = model_normal.predict(Xn_train)
 yo_pred_train = model_out.predict(Xo_train)
-
+'''
 # ===== 7. metryki =====
 def mape(y_true, y_pred):
     errors = np.abs(y_true - y_pred) / y_pred * 100
@@ -167,3 +167,4 @@ for f, c in zip(features, coefs):
     print(f"{f}: {c:.2f}")
 
 
+'''

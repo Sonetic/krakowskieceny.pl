@@ -1,17 +1,21 @@
 import pandas as pd
 import numpy as np
 import requests
+import sys
+import os
+import time
+from opencage.geocoder import OpenCageGeocode
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(BASE_DIR)
 from model import model_normal, model_out
 import re
 import json
 import ast
-from opencage.geocoder import OpenCageGeocode
-
-
 
 
 # wczytanie danych
-df = pd.read_csv("transactions_ready.csv")  # musi zawierać kolumnę 'coordinates'
+df = pd.read_csv(os.path.join(BASE_DIR, "transactions_ready.csv"))  # musi zawierać kolumnę 'coordinates'
 
 
 
@@ -20,7 +24,7 @@ df['numer'] = df['numer'].str.replace(",", "-")
 GEOCODER = OpenCageGeocode("f754d68b43ee405887939e2ab97c1341")
 
 def get_coords(ulica, numer):
-    query = f"{ulica} {numer}, Warszawa, Polska"
+    query = f"{ulica} {numer}, Kraków, Polska"
 
     try:
         result = GEOCODER.geocode(query)

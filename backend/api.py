@@ -23,8 +23,7 @@ app = Flask(__name__)
 CORS(
     app,
     resources={r"/*": {"origins": [
-            "https://wwacenyrenderplatnoscistatic.onrender.com",
-            "https://www.warszawskieceny.pl"
+            "https://krakowskieceny-pl.onrender.com"
         ]}}
 )
 
@@ -63,8 +62,8 @@ def create_checkout_session():
                 "quantity": 1,
             }
         ],
-        success_url="https://wwacenyrenderplatnoscistatic.onrender.com/success.html?session_id={CHECKOUT_SESSION_ID}",
-        cancel_url="https://wwacenyrenderplatnoscistatic.onrender.com/predykcja.html",
+        success_url="https://krakowskieceny-pl.onrender.com/success.html?session_id={CHECKOUT_SESSION_ID}",
+        cancel_url="https://krakowskieceny-pl.onrender.com/predykcja.html",
         metadata={
             "ulica": data.get("ulica"),
             "numer": data.get("numer"),
