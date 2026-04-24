@@ -38,6 +38,8 @@ async function runPrediction() {
     document.getElementById("loader").style.display = "block";
     document.getElementById("progress").style.width = "0%";
     document.getElementById("loaderText").innerText = "Analizujemy dane...";
+    await new Promise(r => setTimeout(r, 8000));
+
     const session_id = new URLSearchParams(window.location.search)
         .get("session_id");
 
@@ -87,7 +89,7 @@ async function runPrediction() {
         setTimeout(() => {
         document.getElementById("loader").style.display = "none";
             }, 1500);
-        alert("Nie udało się wygenerować wyników. Spróbuj ponownie za około 20 sekund.");
+        alert("Nie udało się wygenerować wyników. Spróbuj ponownie.");
         return;
     }
 
