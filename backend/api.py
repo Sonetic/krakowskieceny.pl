@@ -113,7 +113,7 @@ def webhook():
 limiter = Limiter(get_remote_address, app=app)
 
 @app.route("/predict", methods=["POST"])
-@limiter.limit("7 per minute")
+@limiter.limit("7 per 10 seconds")
 def predict():
     data = request.get_json()
     session_id = data.get("session_id")
