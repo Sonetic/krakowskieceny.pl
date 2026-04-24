@@ -32,11 +32,27 @@ async function runPrediction() {
     const data = JSON.parse(localStorage.getItem("formData"));
     data.session_id = session_id;
 
-    const response = await fetch("https://krakowskieceny-plapp.onrender.com/predict", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(data)
-    });
+    const maxRetries = 5;
+    let response;
+
+    for (let i = 0; i < maxRetries; i++) {
+        response = await fetch("https://krakowskieceny-plapp.onrender.com/predict", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(data)
+        });
+
+        if (response.ok) {
+            break; // sukces
+        }
+
+        await new Promise(r => setTimeout(r, 2000)); // czekaj 2s
+    }
+
+    if (!response.ok) {
+        alert("Nie udało się wygenerować wyników. Spróbuj ponownie.");
+        return;
+    }
 
     const blob = await response.blob();
     zipBlob = blob;
