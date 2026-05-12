@@ -191,13 +191,17 @@ def predict():
 
     with zipfile.ZipFile(zip_buffer, "w") as zf:
         zf.writestr("predykcja.csv", pred_csv.getvalue())
-        zf.writestr("okolica.csv", okolica_csv.getvalue())
+
+        if budynek_csv:
+            zf.writestr("budynek.csv", budynek_csv.getvalue())
 
         if ulica_csv:
             zf.writestr("ulica.csv", ulica_csv.getvalue())
 
-        if budynek_csv:
-            zf.writestr("budynek.csv", budynek_csv.getvalue())
+
+
+        zf.writestr("okolica.csv", okolica_csv.getvalue())
+
 
     zip_buffer.seek(0)
 
