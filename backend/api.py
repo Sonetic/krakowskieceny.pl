@@ -208,6 +208,11 @@ def predict():
         download_name="wyniki.zip"
     )
 
+@app.route("/ping", methods=["GET"])
+@limiter.limit("3 per 4 minutes")
+def ping():
+    return jsonify({"status": "alive"}), 200
+
 
 # =========================
 # START
